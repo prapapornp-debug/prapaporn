@@ -1,0 +1,1842 @@
+<!doctype html>
+<html lang="th">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบบทเรียนออนไลน์</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mali:wght@400;600;700&amp;family=Sarabun:wght@400;600;700&amp;display=swap" rel="stylesheet">
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      height: 100%;
+      font-family: 'Mali', 'Sarabun', 'Kanit', 'Tahoma', 'Segoe UI', sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #ffc6e9 0%, #d4a5ff 100%);
+      overflow-y: auto;
+    }
+    
+    .main-wrapper {
+      width: 100%;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Login Page Styles */
+    .login-page {
+      display: block;
+    }
+    
+    .login-page.hidden {
+      display: none;
+    }
+    
+    .hero-section {
+      background: white;
+      border-radius: 30px;
+      padding: 50px 40px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 198, 233, 0.3) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+    
+    .logo-container {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 30px;
+    }
+    
+    .logo-badge {
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 25px;
+      background: linear-gradient(135deg, #ffc6e9, #d4a5ff);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 15px 40px rgba(255, 133, 198, 0.4);
+      animation: bounce 2s ease-in-out infinite;
+      position: relative;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .logo-badge::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3px dashed rgba(255, 255, 255, 0.5);
+      animation: rotate 20s linear infinite;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .logo-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    
+    .logo-badge i {
+      font-size: 100px;
+      color: white;
+    }
+    
+    .hero-text {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .hero-text h1 {
+      font-size: 48px;
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      font-weight: 800;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .hero-text h2 {
+      font-size: 26px;
+      color: #333;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .hero-text p {
+      font-size: 18px;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+    
+    .login-card {
+      background: white;
+      border-radius: 30px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    
+    .tab-container {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 35px;
+      padding: 8px;
+      background: #f8f9fa;
+      border-radius: 20px;
+    }
+    
+    .tab-btn {
+      flex: 1;
+      padding: 16px 24px;
+      border: none;
+      background: transparent;
+      color: #666;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+      font-family: 'Mali', sans-serif;
+    }
+    
+    .tab-btn.active {
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      color: white;
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+      transform: scale(1.02);
+    }
+    
+    .form-section {
+      margin-bottom: 25px;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .input-group label {
+      display: block;
+      margin-bottom: 10px;
+      color: #000000;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    
+    .input-wrapper {
+      position: relative;
+    }
+    
+    .input-icon {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+      color: #ff85c6;
+    }
+    
+    .toggle-password {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      color: #999;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .toggle-password:hover {
+      color: #ff85c6;
+      transform: translateY(-50%) scale(1.1);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: 18px 20px 18px 60px;
+      border: 3px solid #f0f0f0;
+      border-radius: 18px;
+      font-size: 17px;
+      font-family: 'Mali', sans-serif;
+      transition: all 0.3s ease;
+      background: #fafafa;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #ff85c6;
+      background: white;
+      box-shadow: 0 0 0 5px rgba(255, 133, 198, 0.1);
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 20px;
+      border: none;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(255, 105, 180, 0.4);
+      font-family: 'Mali', sans-serif;
+      margin-bottom: 25px;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 105, 180, 0.5);
+    }
+    
+    .submit-btn:active {
+      transform: translateY(-1px);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .action-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #10b981;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .action-link:hover {
+      background: rgba(16, 185, 129, 0.1);
+      transform: translateX(3px);
+    }
+    
+    .action-link.danger {
+      color: #ef4444;
+    }
+    
+    .action-link.danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+    }
+    
+    /* Error Page */
+    .error-page {
+      display: none;
+      text-align: center;
+    }
+    
+    .error-page.show {
+      display: block;
+    }
+    
+    .error-card {
+      background: white;
+      border-radius: 30px;
+      padding: 60px 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    
+    .error-icon {
+      font-size: 100px;
+      color: #ef4444;
+      margin-bottom: 30px;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(-15px) rotate(-5deg); }
+      75% { transform: translateX(15px) rotate(5deg); }
+    }
+    
+    .error-title {
+      font-size: 32px;
+      color: #ef4444;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    
+    .error-message {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 35px;
+    }
+    
+    .retry-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 40px;
+      background: linear-gradient(135deg, #ff1493, #c71585);
+      color: white;
+      text-decoration: none;
+      border-radius: 18px;
+      font-size: 18px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+    }
+    
+    .retry-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(255, 20, 147, 0.5);
+    }
+    
+    /* Lesson Page */
+    .lesson-page {
+      display: none;
+    }
+    
+    .lesson-page.show {
+      display: block;
+    }
+    
+    .welcome-header {
+      background: white;
+      border-radius: 30px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .welcome-header::before {
+      content: '✨';
+      position: absolute;
+      font-size: 100px;
+      opacity: 0.1;
+      top: -20px;
+      left: -20px;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    
+    .welcome-header::after {
+      content: '📚';
+      position: absolute;
+      font-size: 100px;
+      opacity: 0.1;
+      bottom: -20px;
+      right: -20px;
+      animation: twinkle 3s ease-in-out infinite 1.5s;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.1; transform: scale(1); }
+      50% { opacity: 0.2; transform: scale(1.1); }
+    }
+    
+    .welcome-badge {
+      display: inline-block;
+      padding: 12px 30px;
+      background: #ff69b4;
+      color: white;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+    }
+    
+    .welcome-title {
+      font-size: 36px;
+      color: #333;
+      font-weight: 700;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .welcome-user {
+      font-size: 28px;
+      font-weight: 700;
+      color: #e91e63;
+      position: relative;
+      z-index: 1;
+      line-height: 1.5;
+    }
+    
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+    
+    .lesson-card {
+      background: white;
+      border-radius: 25px;
+      padding: 40px 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border: 3px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .lesson-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #ffc6e9, #d4a5ff);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
+    }
+    
+    .lesson-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 50px rgba(255, 133, 198, 0.3);
+      border-color: #ffc6e9;
+    }
+    
+    .lesson-card:hover::before {
+      opacity: 0.15;
+    }
+    
+    .lesson-icon {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #ffc6e9, #d4a5ff);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 45px;
+      color: white;
+      box-shadow: 0 10px 25px rgba(255, 133, 198, 0.3);
+      transition: all 0.4s ease;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .lesson-card:hover .lesson-icon {
+      transform: rotateY(360deg) scale(1.1);
+      box-shadow: 0 15px 35px rgba(255, 133, 198, 0.5);
+    }
+    
+    .lesson-card:nth-child(1) .lesson-icon {
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    }
+    
+    .lesson-card:nth-child(2) .lesson-icon {
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    }
+    
+    .lesson-card:nth-child(3) .lesson-icon {
+      background: linear-gradient(135deg, #34d399, #10b981);
+    }
+    
+    .lesson-card:nth-child(4) .lesson-icon {
+      background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    }
+    
+    .lesson-card:nth-child(5) .lesson-icon {
+      background: linear-gradient(135deg, #f472b6, #ec4899);
+    }
+    
+    .lesson-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #333;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .lesson-card.full-width {
+      grid-column: 1 / -1;
+    }
+    
+    .logout-container {
+      text-align: center;
+    }
+    
+    .logout-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 45px;
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      border: none;
+      border-radius: 18px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+      font-family: 'Mali', sans-serif;
+    }
+    
+    .logout-btn:hover {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(239, 68, 68, 0.4);
+    }
+    
+    .reset-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 45px;
+      background: #1a1a1a;
+      color: #ffffff;
+      border: 3px solid #1a1a1a;
+      border-radius: 18px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      font-family: 'Mali', sans-serif;
+      margin-bottom: 20px;
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .reset-btn:hover {
+      background: #000000;
+      border-color: #000000;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+      .main-wrapper {
+        padding: 20px 15px;
+      }
+      
+      .hero-section {
+        padding: 35px 25px;
+      }
+      
+      .logo-badge {
+        width: 150px;
+        height: 150px;
+      }
+      
+      .logo-badge i {
+        font-size: 75px;
+      }
+      
+      .hero-text h1 {
+        font-size: 32px;
+      }
+      
+      .hero-text h2 {
+        font-size: 20px;
+      }
+      
+      .hero-text p {
+        font-size: 16px;
+      }
+      
+      .login-card {
+        padding: 30px 25px;
+      }
+      
+      .tab-btn {
+        font-size: 16px;
+        padding: 14px 20px;
+      }
+      
+      .lessons-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+      
+      .welcome-title {
+        font-size: 26px;
+      }
+      
+      .welcome-user {
+        font-size: 22px;
+      }
+      
+      .lesson-title {
+        font-size: 18px;
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="main-wrapper">
+   <div class="container"><!-- Login Page -->
+    <div class="login-page" id="loginPage">
+     <div class="hero-section">
+      <div class="logo-container">
+       <div class="logo-badge"><img src="https://i.postimg.cc/tYwJvLTD/image.png" alt="โลโก้" loading="lazy" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-graduation-cap\'></i>';">
+       </div>
+      </div>
+      <div class="hero-text">
+       <h1 id="mainTitle">บทเรียนออนไลน์</h1>
+       <h2 id="subjectTitle">เรื่อง กระบวนการออกแบบเชิงวิศวกรรม</h2>
+       <p id="courseName">รายวิชาการออกแบบและเทคโนโลยี</p>
+       <p id="targetAudience">สำหรับนักเรียนระดับชั้นมัธยมศึกษาปีที่ 1</p>
+      </div>
+     </div>
+     <div class="login-card">
+      <div class="tab-container"><button class="tab-btn active" data-tab="student" onclick="switchTab(event)"> <i class="fas fa-user-graduate"></i> สำหรับผู้เรียน </button> <button class="tab-btn" data-tab="admin" onclick="switchTab(event)"> <i class="fas fa-user-tie"></i> สำหรับผู้ดูแล </button>
+      </div>
+      <form class="form-section" onsubmit="handleLogin(event)">
+       <div class="input-group"><label for="username">ชื่อผู้ใช้</label>
+        <div class="input-wrapper"><i class="fas fa-user input-icon"></i> <input type="text" id="username" class="form-input" placeholder="กรอกชื่อผู้ใช้ของคุณ" required>
+        </div>
+       </div>
+       <div class="input-group"><label for="password">รหัสผ่าน</label>
+        <div class="input-wrapper"><i class="fas fa-lock input-icon"></i> <input type="password" id="password" class="form-input" placeholder="กรอกรหัสผ่าน" required> <i class="fas fa-eye toggle-password" id="togglePassword" onclick="togglePasswordVisibility()"></i>
+        </div>
+       </div><button type="submit" class="submit-btn" id="loginBtn"> <i class="fas fa-sign-in-alt"></i> <span id="loginButtonText">เข้าสู่ระบบ</span> </button>
+      </form>
+      <div class="footer-actions"><a href="#" class="action-link" id="usageLink"> <i class="fas fa-question-circle"></i> <span id="usageLinkText">วิธีการใช้งาน</span> </a> <a href="#" class="action-link danger" id="scoreLink"> <i class="fas fa-chart-bar"></i> <span id="scoreLinkText">ดูคะแนน</span> </a>
+      </div>
+     </div>
+    </div><!-- Error Page -->
+    <div class="error-page" id="errorPage">
+     <div class="error-card">
+      <div class="error-icon"><i class="fas fa-times-circle"></i>
+      </div>
+      <h2 class="error-title">เข้าสู่ระบบไม่สำเร็จ</h2>
+      <p class="error-message">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง</p><a href="#" class="retry-btn" onclick="retryLogin(event)"> <i class="fas fa-redo-alt"></i> ลองอีกครั้ง </a>
+     </div>
+    </div><!-- Lesson Page (Student) -->
+    <div class="lesson-page" id="lessonPage">
+     <div class="welcome-header">
+      <div class="welcome-badge">
+       Welcome!
+      </div>
+      <h1 class="welcome-title" id="welcomeText">ยินดีต้อนรับเข้าสู่บทเรียนออนไลน์</h1>
+      <div class="welcome-user" id="userName">
+       นักเรียน
+      </div>
+     </div>
+     <div class="lessons-grid">
+      <div class="lesson-card" id="pretestCard" onclick="openTestModal('pretest')">
+       <div class="lesson-icon"><i class="fas fa-clipboard-list"></i>
+       </div>
+       <div class="lesson-title" id="pretestText">
+        แบบทดสอบก่อนเรียน
+       </div>
+      </div>
+      <div class="lesson-card" id="contentCard" onclick="trackLessonClick('เนื้อหา'); showContentImages();">
+       <div class="lesson-icon"><i class="fas fa-book-open"></i>
+       </div>
+       <div class="lesson-title" id="contentText">
+        เนื้อหา
+       </div>
+      </div>
+      <div class="lesson-card" id="activityCard" onclick="handleActivityClick()">
+       <div class="lesson-icon"><i class="fas fa-pencil-alt"></i>
+       </div>
+       <div class="lesson-title" id="activityText">
+        ใบกิจกรรม
+       </div>
+      </div>
+      <div class="lesson-card" id="posttestCard" onclick="openTestModal('posttest')">
+       <div class="lesson-icon"><i class="fas fa-tasks"></i>
+       </div>
+       <div class="lesson-title" id="posttestText">
+        แบบทดสอบหลังเรียน
+       </div>
+      </div>
+      <div class="lesson-card full-width" id="gameCard" onclick="trackLessonClick('Game')">
+       <div class="lesson-icon"><i class="fas fa-gamepad"></i>
+       </div>
+       <div class="lesson-title" id="gameText">
+        Game
+       </div>
+      </div>
+     </div>
+     <div class="logout-container"><button class="logout-btn" onclick="logout()"> <i class="fas fa-sign-out-alt"></i> <span id="logoutText">ออกจากระบบ</span> </button>
+     </div>
+    </div><!-- Admin Dashboard Page -->
+    <div class="lesson-page" id="adminPage">
+     <div class="welcome-header">
+      <div class="welcome-badge" style="background: #8b5cf6;">
+       Admin Dashboard
+      </div>
+      <h1 class="welcome-title">ระบบจัดการสำหรับผู้ดูแล</h1>
+      <div class="welcome-user" id="adminUserName">
+       ผู้ดูแล
+      </div>
+     </div>
+     <div class="lessons-grid">
+      <div class="lesson-card" onclick="showStatistics()">
+       <div class="lesson-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fas fa-chart-line"></i>
+       </div>
+       <div class="lesson-title">
+        สถิติการเข้าใช้งาน
+       </div>
+      </div>
+      <div class="lesson-card" onclick="showStudentList()">
+       <div class="lesson-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-users"></i>
+       </div>
+       <div class="lesson-title">
+        รายชื่อนักเรียน
+       </div>
+      </div>
+      <div class="lesson-card" onclick="showLoginHistory()">
+       <div class="lesson-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-history"></i>
+       </div>
+       <div class="lesson-title">
+        ประวัติการเข้าสู่ระบบ
+       </div>
+      </div>
+      <div class="lesson-card" onclick="showSettings()">
+       <div class="lesson-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"><i class="fas fa-cog"></i>
+       </div>
+       <div class="lesson-title">
+        ตั้งค่าระบบ
+       </div>
+      </div>
+     </div>
+     <div class="logout-container"><button class="reset-btn" onclick="resetStatistics()"> <i class="fas fa-trash-restore"></i> รีเซ็ตสถิติทั้งหมด </button> <button class="logout-btn" onclick="logout()"> <i class="fas fa-sign-out-alt"></i> ออกจากระบบ </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const validStudents = [
+      "กมลักษณ์ ศุภฤกษ์", "กมลธิดา ดงระเบียบ", "กัญญานารักษ์ โพธิ์หอก",
+      "กัญจน์นนันท์ เวียงนท์", "ชญานิศ แซ๋วฮวง", "ชญชิดา คำขันธะลา",
+      "ชนัญชิดา บุญมาเลี่ยม", "ฐัณิชา ศาสตร์สูงเนิน", "ณิชกมล เวียงภูกดิ์",
+      "ธนิศรา แซ๋วเชียงใหม่", "ธนิตรา ยิ่งกำแหง", "ธัญฐิตรา ชัยวระเสริฐ",
+      "ธนารัตน์ คำตา", "ธีดารัตน์ อาจพงษา", "นัสกร จำปาโอ้ง",
+      "นรการ พุทธิ์สรไกร", "นันปิยา บุญถิ่นพิทักษ์", "นันทนัทธ์ อินทร",
+      "นันทชา มงคลธสุวรณ", "นิยดา คะชา", "นิ่มทอง คำขรี",
+      "พุณยาพร เช่าพูธร", "พลภัส เนียมสกุล", "พัชชาภา เลาะหะนะ",
+      "ยุพาพร ทองยอด", "รุจิภัส ยอดสอดาวงษ์", "รัฐติตา สร้าอุ่นม้า",
+      "ลภัสรดา จันทะนิล", "วิภาสินี คำมะพลั่ง", "ศิปราภา ใสระโอด",
+      "ศิรมาส แซ่ตั้ง", "ศิริมาภรณ์ เงินมั่น", "ศุภิสรา แนบนอุดร",
+      "สิริจรยา ศรีธิแสลง", "หนึ่งฐตา โพธิ์มา", "อธิชา ศรีดำมา",
+      "อรศรา ทองใส", "อภิสรา จิบทอง", "อัลน์ลิตา คัมภาส",
+      "อุษาภาศ ทงค์เดือน", "บุญชวีย์ สมมณี", "พลอยพลิน ชิดพรม",
+      "T.ประภาภรณ์"
+    ];
+    
+    const studentPassword = "str104";
+    
+    const adminCredentials = {
+      username: "T.Prapaporn",
+      password: "PP1234"
+    };
+    
+    let currentUsername = "";
+    let currentUserType = "student";
+    let allLoginData = [];
+    
+    const defaultConfig = {
+      main_title: "บทเรียนออนไลน์",
+      subject_title: "เรื่อง กระบวนการออกแบบเชิงวิศวกรรม",
+      course_name: "รายวิชาการออกแบบและเทคโนโลยี",
+      target_audience: "สำหรับนักเรียนระดับชั้นมัธยมศึกษาปีที่ 1",
+      login_button_text: "เข้าสู่ระบบ",
+      usage_link_text: "วิธีการใช้งาน",
+      score_link_text: "ดูคะแนน",
+      welcome_text: "ยินดีต้อนรับเข้าสู่บทเรียนออนไลน์",
+      pretest_button: "แบบทดสอบก่อนเรียน",
+      content_button: "เนื้อหา",
+      activity_button: "ใบกิจกรรม",
+      posttest_button: "แบบทดสอบหลังเรียน",
+      game_button: "Game",
+      logout_button: "ออกจากระบบ",
+      canva_slide_url: "https://www.canva.com/design/DAG71Cvhxks/9EP-Dq11Xcg5_8KV5GqXJQ/edit?utm_content=DAG71Cvhxks&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton",
+      slide_button: "ดูสไลด์ประกอบ",
+      pretest_form_url: "https://forms.gle/uUh4SBRScYaf1tU89",
+      posttest_form_url: "https://forms.gle/1Ff18BrREyWKYLhMA",
+      start_test_button: "เริ่มทำแบบทดสอบ",
+      activity_form_url: "https://forms.gle/b3xpLFkDsaRANRhu8",
+      start_sheet_button: "เริ่มทำใบกิจกรรม",
+      background_color: "#ffc6e9",
+      primary_color: "#d4a5ff",
+      text_color: "#333333",
+      font_family: "Mali",
+      font_size: 18
+    };
+    
+    let currentRecordCount = 0;
+    
+    const dataHandler = {
+      onDataChanged(data) {
+        currentRecordCount = data.length;
+        allLoginData = data;
+      }
+    };
+    
+    async function initializeSDKs() {
+      if (window.dataSdk) {
+        const initResult = await window.dataSdk.init(dataHandler);
+        if (!initResult.isOk) {
+          console.error("Failed to initialize data SDK");
+        }
+      }
+      
+      if (window.elementSdk) {
+        window.elementSdk.init({
+          defaultConfig: defaultConfig,
+          onConfigChange: async (config) => {
+            const baseSize = config.font_size || defaultConfig.font_size;
+            const customFont = config.font_family || defaultConfig.font_family;
+            const baseFontStack = 'Mali, Sarabun, Kanit, Tahoma, Segoe UI, sans-serif';
+            
+            document.getElementById('mainTitle').textContent = config.main_title || defaultConfig.main_title;
+            document.getElementById('subjectTitle').textContent = config.subject_title || defaultConfig.subject_title;
+            document.getElementById('courseName').textContent = config.course_name || defaultConfig.course_name;
+            document.getElementById('targetAudience').textContent = config.target_audience || defaultConfig.target_audience;
+            document.getElementById('loginButtonText').textContent = config.login_button_text || defaultConfig.login_button_text;
+            document.getElementById('usageLinkText').textContent = config.usage_link_text || defaultConfig.usage_link_text;
+            document.getElementById('scoreLinkText').textContent = config.score_link_text || defaultConfig.score_link_text;
+            document.getElementById('welcomeText').textContent = config.welcome_text || defaultConfig.welcome_text;
+            document.getElementById('pretestText').textContent = config.pretest_button || defaultConfig.pretest_button;
+            document.getElementById('contentText').textContent = config.content_button || defaultConfig.content_button;
+            document.getElementById('activityText').textContent = config.activity_button || defaultConfig.activity_button;
+            document.getElementById('posttestText').textContent = config.posttest_button || defaultConfig.posttest_button;
+            document.getElementById('gameText').textContent = config.game_button || defaultConfig.game_button;
+            document.getElementById('logoutText').textContent = config.logout_button || defaultConfig.logout_button;
+            
+            if (currentUsername) {
+              const icon = currentUserType === "admin" ? "👨‍🏫" : "🎓";
+              document.getElementById('userName').textContent = `${icon} ${currentUsername}`;
+            }
+            
+            const bgColor1 = config.background_color || defaultConfig.background_color;
+            const bgColor2 = config.primary_color || defaultConfig.primary_color;
+            document.body.style.background = `linear-gradient(135deg, ${bgColor1} 0%, ${bgColor2} 100%)`;
+            
+            const textColor = config.text_color || defaultConfig.text_color;
+            document.querySelectorAll('.hero-text h2, .hero-text p').forEach(el => {
+              el.style.color = textColor;
+            });
+            
+            document.getElementById('mainTitle').style.fontSize = `${baseSize * 2.67}px`;
+            document.getElementById('subjectTitle').style.fontSize = `${baseSize * 1.44}px`;
+            document.getElementById('welcomeText').style.fontSize = `${baseSize * 2}px`;
+            
+            document.getElementById('mainTitle').style.fontFamily = `${customFont}, ${baseFontStack}`;
+            document.getElementById('subjectTitle').style.fontFamily = `${customFont}, ${baseFontStack}`;
+            document.getElementById('courseName').style.fontFamily = `${customFont}, ${baseFontStack}`;
+            document.getElementById('targetAudience').style.fontFamily = `${customFont}, ${baseFontStack}`;
+            document.getElementById('welcomeText').style.fontFamily = `${customFont}, ${baseFontStack}`;
+            document.getElementById('userName').style.fontFamily = `${customFont}, ${baseFontStack}`;
+            
+            document.querySelectorAll('.tab-btn, .submit-btn, .lesson-title, .logout-btn, .reset-btn').forEach(el => {
+              el.style.fontFamily = `${customFont}, ${baseFontStack}`;
+            });
+            
+            document.querySelectorAll('.form-input').forEach(input => {
+              input.style.fontFamily = `${customFont}, ${baseFontStack}`;
+            });
+          },
+          mapToCapabilities: (config) => ({
+            recolorables: [
+              {
+                get: () => config.background_color || defaultConfig.background_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.background_color = value;
+                    window.elementSdk.setConfig({ background_color: value });
+                  }
+                }
+              },
+              {
+                get: () => config.primary_color || defaultConfig.primary_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.primary_color = value;
+                    window.elementSdk.setConfig({ primary_color: value });
+                  }
+                }
+              },
+              {
+                get: () => config.text_color || defaultConfig.text_color,
+                set: (value) => {
+                  if (window.elementSdk && window.elementSdk.config) {
+                    window.elementSdk.config.text_color = value;
+                    window.elementSdk.setConfig({ text_color: value });
+                  }
+                }
+              }
+            ],
+            borderables: [],
+            fontEditable: {
+              get: () => config.font_family || defaultConfig.font_family,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.font_family = value;
+                  window.elementSdk.setConfig({ font_family: value });
+                }
+              }
+            },
+            fontSizeable: {
+              get: () => config.font_size || defaultConfig.font_size,
+              set: (value) => {
+                if (window.elementSdk && window.elementSdk.config) {
+                  window.elementSdk.config.font_size = value;
+                  window.elementSdk.setConfig({ font_size: value });
+                }
+              }
+            }
+          }),
+          mapToEditPanelValues: (config) => new Map([
+            ["main_title", config.main_title || defaultConfig.main_title],
+            ["subject_title", config.subject_title || defaultConfig.subject_title],
+            ["course_name", config.course_name || defaultConfig.course_name],
+            ["target_audience", config.target_audience || defaultConfig.target_audience],
+            ["login_button_text", config.login_button_text || defaultConfig.login_button_text],
+            ["usage_link_text", config.usage_link_text || defaultConfig.usage_link_text],
+            ["score_link_text", config.score_link_text || defaultConfig.score_link_text],
+            ["welcome_text", config.welcome_text || defaultConfig.welcome_text],
+            ["pretest_button", config.pretest_button || defaultConfig.pretest_button],
+            ["content_button", config.content_button || defaultConfig.content_button],
+            ["activity_button", config.activity_button || defaultConfig.activity_button],
+            ["posttest_button", config.posttest_button || defaultConfig.posttest_button],
+            ["game_button", config.game_button || defaultConfig.game_button],
+            ["logout_button", config.logout_button || defaultConfig.logout_button],
+            ["canva_slide_url", config.canva_slide_url || defaultConfig.canva_slide_url],
+            ["slide_button", config.slide_button || defaultConfig.slide_button],
+            ["pretest_form_url", config.pretest_form_url || defaultConfig.pretest_form_url],
+            ["posttest_form_url", config.posttest_form_url || defaultConfig.posttest_form_url],
+            ["start_test_button", config.start_test_button || defaultConfig.start_test_button],
+            ["activity_form_url", config.activity_form_url || defaultConfig.activity_form_url],
+            ["start_sheet_button", config.start_sheet_button || defaultConfig.start_sheet_button]
+          ])
+        });
+      }
+    }
+    
+    function switchTab(event) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      currentUserType = event.currentTarget.dataset.tab;
+    }
+    
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const toggleIcon = document.getElementById('togglePassword');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+      }
+    }
+    
+    async function trackLessonClick(lessonName) {
+      if (window.dataSdk && currentRecordCount < 999) {
+        const result = await window.dataSdk.create({
+          username: currentUsername,
+          timestamp: new Date().toISOString(),
+          login_success: true,
+          user_type: currentUserType,
+          action_type: "lesson_click",
+          lesson_name: lessonName
+        });
+        
+        if (!result.isOk) {
+          console.error("Failed to save lesson click");
+        }
+      }
+    }
+    
+    function handleActivityClick() {
+      const config = (window.elementSdk && window.elementSdk.config) || defaultConfig;
+      
+      let testUrl = config.activity_form_url || defaultConfig.activity_form_url;
+      let testTitle = config.activity_button || defaultConfig.activity_button;
+      let testIcon = "fa-solid fa-pen";
+      let testColor = "#FF8FA8";
+      trackLessonClick('ใบกิจกรรม');
+      
+      const startButtonText = config.start_sheet_button || defaultConfig.start_sheet_button;
+      
+      if (!testUrl) {
+        const message = document.createElement('div');
+        message.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);background:white;padding:40px;border-radius:20px;box-shadow:0 15px 50px rgba(0,0,0,0.4);z-index:10000;text-align:center;max-width:400px;border:3px solid #ef4444;';
+        message.innerHTML = `
+          <i class="fas fa-exclamation-circle" style="font-size:60px;color:#ef4444;margin-bottom:20px;"></i>
+          <p style="font-size:18px;color:#333;font-weight:600;margin:0;">ยังไม่ได้ตั้งค่า URL สำหรับแบบทดสอบนี้</p>
+        `;
+        document.body.appendChild(message);
+        setTimeout(() => message.remove(), 3000);
+        return;
+      }
+      
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      
+      overlay.innerHTML = `
+        <div style="background:white;border-radius:25px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;">
+          <div style="background:linear-gradient(135deg, ${testColor}, ${testColor}dd);padding:40px;text-align:center;">
+            <div style="width:100px;height:100px;margin:0 auto 20px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+              <i class="fas ${testIcon}" style="font-size:50px;color:${testColor};"></i>
+            </div>
+            <h2 style="font-size:28px;color:white;font-weight:700;margin:0;">${testTitle}</h2>
+          </div>
+          
+          <div style="padding:40px 35px;">
+            <div style="background:#f0fdf4;border-left:4px solid #10b981;padding:20px;border-radius:10px;margin-bottom:30px;">
+              <p style="font-size:16px;color:#065f46;margin:0;line-height:1.6;">
+                <i class="fas fa-info-circle" style="margin-right:8px;"></i>
+                คลิกปุ่มด้านล่างเพื่อเริ่มทำใบกิจกรรม ใบกิจกรรมจะเปิดในแท็บใหม่
+              </p>
+            </div>
+            
+            <button onclick="window.open('${testUrl}', '_blank', 'noopener,noreferrer'); this.parentElement.parentElement.parentElement.remove();" style="width:100%;padding:18px;background:linear-gradient(135deg, ${testColor}, ${testColor}dd);color:white;border:none;border-radius:15px;font-size:18px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;display:flex;align-items:center;justify-content:center;gap:12px;transition:all 0.3s;box-shadow:0 5px 20px ${testColor}55;margin-bottom:15px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px ${testColor}77';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px ${testColor}55';">
+              <i class="fas fa-play-circle"></i>
+              ${startButtonText}
+            </button>
+            
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="width:100%;padding:16px;background:#e5e7eb;color:#374151;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;transition:all 0.3s;" onmouseover="this.style.background='#d1d5db';" onmouseout="this.style.background='#e5e7eb';">
+              <i class="fas fa-times"></i> ยกเลิก
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+    }
+    
+    function openTestModal(testType) {
+      const config = (window.elementSdk && window.elementSdk.config) || defaultConfig;
+      
+      let testUrl = "";
+      let testTitle = "";
+      let testIcon = "";
+      let testColor = "";
+      
+      if (testType === "pretest") {
+        testUrl = config.pretest_form_url || defaultConfig.pretest_form_url;
+        testTitle = config.pretest_button || defaultConfig.pretest_button;
+        testIcon = "fa-clipboard-list";
+        testColor = "#fbbf24";
+        trackLessonClick('แบบทดสอบก่อนเรียน');
+      } else {
+        testUrl = config.posttest_form_url || defaultConfig.posttest_form_url;
+        testTitle = config.posttest_button || defaultConfig.posttest_button;
+        testIcon = "fa-tasks";
+        testColor = "#a78bfa";
+        trackLessonClick('แบบทดสอบหลังเรียน');
+      }
+      
+      const startButtonText = config.start_test_button || defaultConfig.start_test_button;
+      
+      if (!testUrl) {
+        const message = document.createElement('div');
+        message.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);background:white;padding:40px;border-radius:20px;box-shadow:0 15px 50px rgba(0,0,0,0.4);z-index:10000;text-align:center;max-width:400px;border:3px solid #ef4444;';
+        message.innerHTML = `
+          <i class="fas fa-exclamation-circle" style="font-size:60px;color:#ef4444;margin-bottom:20px;"></i>
+          <p style="font-size:18px;color:#333;font-weight:600;margin:0;">ยังไม่ได้ตั้งค่า URL สำหรับแบบทดสอบนี้</p>
+        `;
+        document.body.appendChild(message);
+        setTimeout(() => message.remove(), 3000);
+        return;
+      }
+      
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      
+      overlay.innerHTML = `
+        <div style="background:white;border-radius:25px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;">
+          <div style="background:linear-gradient(135deg, ${testColor}, ${testColor}dd);padding:40px;text-align:center;">
+            <div style="width:100px;height:100px;margin:0 auto 20px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+              <i class="fas ${testIcon}" style="font-size:50px;color:${testColor};"></i>
+            </div>
+            <h2 style="font-size:28px;color:white;font-weight:700;margin:0;">${testTitle}</h2>
+          </div>
+          
+          <div style="padding:40px 35px;">
+            <div style="background:#f0fdf4;border-left:4px solid #10b981;padding:20px;border-radius:10px;margin-bottom:30px;">
+              <p style="font-size:16px;color:#065f46;margin:0;line-height:1.6;">
+                <i class="fas fa-info-circle" style="margin-right:8px;"></i>
+                คลิกปุ่มด้านล่างเพื่อเริ่มทำแบบทดสอบ แบบทดสอบจะเปิดในแท็บใหม่
+              </p>
+            </div>
+            
+            <button onclick="window.open('${testUrl}', '_blank', 'noopener,noreferrer'); this.parentElement.parentElement.parentElement.remove();" style="width:100%;padding:18px;background:linear-gradient(135deg, ${testColor}, ${testColor}dd);color:white;border:none;border-radius:15px;font-size:18px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;display:flex;align-items:center;justify-content:center;gap:12px;transition:all 0.3s;box-shadow:0 5px 20px ${testColor}55;margin-bottom:15px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px ${testColor}77';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 5px 20px ${testColor}55';">
+              <i class="fas fa-play-circle"></i>
+              ${startButtonText}
+            </button>
+            
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="width:100%;padding:16px;background:#e5e7eb;color:#374151;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;transition:all 0.3s;" onmouseover="this.style.background='#d1d5db';" onmouseout="this.style.background='#e5e7eb';">
+              <i class="fas fa-times"></i> ยกเลิก
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(overlay);
+    }
+    
+    function showContentImages() {
+      const canvaSlideUrl = (window.elementSdk && window.elementSdk.config && window.elementSdk.config.canva_slide_url) || defaultConfig.canva_slide_url;
+      const slideButtonText = (window.elementSdk && window.elementSdk.config && window.elementSdk.config.slide_button) || defaultConfig.slide_button;
+      
+      const images = [
+        { url: 'https://i.postimg.cc/mPQFcz54/image.jpg', alt: 'ภาพที่ 1' },
+        { url: 'https://i.postimg.cc/RWrHVQXm/image.jpg', alt: 'ภาพที่ 2' },
+        { url: 'https://i.postimg.cc/jLnfbk6x/image.jpg', alt: 'ภาพที่ 3' },
+        { url: 'https://i.postimg.cc/3kMvJCnH/image.jpg', alt: 'ภาพที่ 4' },
+        { url: 'https://i.postimg.cc/rD6rFCQ2/image.jpg', alt: 'ภาพที่ 5' },
+        { url: 'https://i.postimg.cc/75v2YMXK/image.jpg', alt: 'ภาพที่ 6' },
+        { url: 'https://i.postimg.cc/xcNm2FGL/image.jpg', alt: 'ภาพที่ 7' },
+        { url: 'https://i.postimg.cc/Tp5b6Hjh/image.jpg', alt: 'ภาพที่ 8' },
+        { url: 'https://i.postimg.cc/PPvDjFbq/image.jpg', alt: 'ภาพที่ 9' },
+        { url: 'https://i.postimg.cc/k6M8PJwr/image.jpg', alt: 'ภาพที่ 10' },
+        { url: 'https://i.postimg.cc/yWd9fNkQ/image.jpg', alt: 'ภาพที่ 11' },
+        { url: 'https://i.postimg.cc/KkcLhGfC/image.jpg', alt: 'ภาพที่ 12' },
+        { url: 'https://i.postimg.cc/2Vg4Lfj9/image.jpg', alt: 'ภาพที่ 13' },
+        { url: 'https://i.postimg.cc/34rpQ895/image.jpg', alt: 'ภาพที่ 14' },
+        { url: 'https://i.postimg.cc/F7YyKKv5/image.jpg', alt: 'ภาพที่ 15' }
+      ];
+      
+      let currentImageIndex = 0;
+      
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      
+      const updateImage = () => {
+        const imageHTML = `
+          <div style="background:white;border-radius:25px;max-width:900px;width:100%;max-height:90%;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.5);overflow:hidden;">
+            <div style="background:linear-gradient(135deg, #60a5fa, #3b82f6);padding:25px 30px;display:flex;justify-content:space-between;align-items:center;">
+              <h2 style="font-size:24px;color:white;font-weight:700;margin:0;">
+                <i class="fas fa-book-open" style="margin-right:12px;"></i>เนื้อหาบทเรียน
+              </h2>
+              <button id="closeContentBtn" style="width:40px;height:40px;border:none;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;font-size:24px;color:white;transition:all 0.3s;font-weight:700;">×</button>
+            </div>
+            
+            <div style="flex:1;overflow-y:auto;padding:30px;display:flex;flex-direction:column;align-items:center;background:#f9fafb;">
+              <div style="background:white;padding:20px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,0.1);margin-bottom:25px;width:100%;">
+                <div style="text-align:center;margin-bottom:15px;">
+                  <span style="background:linear-gradient(135deg, #60a5fa, #3b82f6);color:white;padding:8px 20px;border-radius:20px;font-size:16px;font-weight:600;">
+                    ${images[currentImageIndex].alt} / ${images.length}
+                  </span>
+                </div>
+                <img src="${images[currentImageIndex].url}" alt="${images[currentImageIndex].alt}" loading="lazy" style="width:100%;height:auto;border-radius:12px;box-shadow:0 8px 25px rgba(0,0,0,0.15);image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;image-rendering:high-quality;" onerror="this.style.display='none'; this.parentElement.innerHTML+='<div style=\\'text-align:center;padding:60px;color:#ef4444;\\'><i class=\\'fas fa-exclamation-triangle\\' style=\\'font-size:48px;margin-bottom:15px;display:block;\\'></i><p style=\\'font-size:18px;font-weight:600;\\'>ไม่สามารถโหลดรูปภาพได้</p></div>';">
+              </div>
+              
+              <div style="display:flex;gap:15px;align-items:center;width:100%;justify-content:center;flex-wrap:wrap;">
+                <button id="prevBtn" style="padding:14px 28px;background:linear-gradient(135deg, #e5e7eb, #d1d5db);color:#374151;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.3s;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                  <i class="fas fa-chevron-left"></i> ก่อนหน้า
+                </button>
+                
+                <div style="background:white;padding:12px 24px;border-radius:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                  <span style="font-size:18px;font-weight:700;color:#3b82f6;">${currentImageIndex + 1}</span>
+                  <span style="font-size:16px;color:#666;margin:0 8px;">/</span>
+                  <span style="font-size:18px;font-weight:600;color:#666;">${images.length}</span>
+                </div>
+                
+                <button id="nextBtn" style="padding:14px 28px;background:linear-gradient(135deg, #60a5fa, #3b82f6);color:white;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;display:flex;align-items:center;gap:10px;transition:all 0.3s;box-shadow:0 4px 12px rgba(59, 130, 246, 0.3);">
+                  ถัดไป <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
+              
+              <div style="margin-top:25px;text-align:center;width:100%;">
+                <p style="font-size:14px;color:#666;margin:0 0 20px 0;">
+                  <i class="fas fa-info-circle" style="margin-right:6px;color:#3b82f6;"></i>
+                  ใช้ปุ่มก่อนหน้า/ถัดไป เพื่อดูเนื้อหาทั้งหมด
+                </p>
+                <button onclick="window.open('${canvaSlideUrl}', '_blank', 'noopener,noreferrer')" style="padding:16px 40px;background:linear-gradient(135deg, #10b981, #059669);color:white;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;display:inline-flex;align-items:center;gap:12px;transition:all 0.3s;box-shadow:0 6px 20px rgba(16, 185, 129, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 25px rgba(16, 185, 129, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.3)';">
+                  <i class="fas fa-external-link-alt"></i>
+                  ${slideButtonText}
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        overlay.innerHTML = imageHTML;
+        
+        const closeBtn = overlay.querySelector('#closeContentBtn');
+        const prevBtn = overlay.querySelector('#prevBtn');
+        const nextBtn = overlay.querySelector('#nextBtn');
+        
+        closeBtn.onclick = (e) => {
+          e.preventDefault();
+          overlay.remove();
+        };
+        
+        prevBtn.onclick = () => {
+          if (currentImageIndex > 0) {
+            currentImageIndex--;
+            updateImage();
+          }
+        };
+        
+        nextBtn.onclick = () => {
+          if (currentImageIndex < images.length - 1) {
+            currentImageIndex++;
+            updateImage();
+          }
+        };
+        
+        if (currentImageIndex === 0) {
+          prevBtn.style.opacity = '0.5';
+          prevBtn.style.cursor = 'not-allowed';
+        }
+        
+        if (currentImageIndex === images.length - 1) {
+          nextBtn.style.opacity = '0.5';
+          nextBtn.style.cursor = 'not-allowed';
+        }
+      };
+      
+      updateImage();
+      document.body.appendChild(overlay);
+    }
+    
+    async function handleLogin(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const loginBtn = document.getElementById('loginBtn');
+      
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังเข้าสู่ระบบ...';
+      
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      let isValid = false;
+      
+      if (currentUserType === "student") {
+        isValid = validStudents.includes(username) && password === studentPassword;
+      } else {
+        isValid = username === adminCredentials.username && password === adminCredentials.password;
+      }
+      
+      if (isValid) {
+        if (window.dataSdk) {
+          if (currentRecordCount >= 999) {
+            const overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;';
+            overlay.innerHTML = '<div style="background:white;padding:40px;border-radius:20px;text-align:center;max-width:450px;box-shadow:0 20px 60px rgba(0,0,0,0.3);"><i class="fas fa-exclamation-triangle" style="font-size:60px;color:#ef4444;margin-bottom:25px;"></i><p style="font-size:20px;color:#333;margin-bottom:25px;font-weight:600;">ถึงขีดจำกัดการบันทึก 999 รายการแล้ว</p><button onclick="this.parentElement.parentElement.remove()" style="padding:14px 40px;background:linear-gradient(135deg, #ffc6e9, #d4a5ff);color:white;border:none;border-radius:12px;cursor:pointer;font-size:16px;font-weight:600;">ตกลง</button></div>';
+            document.body.appendChild(overlay);
+            loginBtn.disabled = false;
+            const configText = (window.elementSdk && window.elementSdk.config && window.elementSdk.config.login_button_text) || defaultConfig.login_button_text;
+            loginBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i><span>${configText}</span>`;
+            return;
+          }
+          
+          const result = await window.dataSdk.create({
+            username: username,
+            timestamp: new Date().toISOString(),
+            login_success: true,
+            user_type: currentUserType,
+            action_type: "login",
+            lesson_name: ""
+          });
+          
+          if (!result.isOk) {
+            console.error("Failed to save login data");
+          }
+        }
+        
+        currentUsername = username;
+        const icon = currentUserType === "admin" ? "👨‍🏫" : "🎓";
+        
+        const welcomeConfig = (window.elementSdk && window.elementSdk.config && window.elementSdk.config.welcome_text) || defaultConfig.welcome_text;
+        document.getElementById('welcomeText').textContent = welcomeConfig;
+        
+        document.getElementById('userName').textContent = `${icon} ${username}`;
+        
+        document.getElementById('loginPage').classList.add('hidden');
+        
+        if (currentUserType === "admin") {
+          document.getElementById('adminPage').classList.add('show');
+          document.getElementById('adminUserName').textContent = `👨‍🏫 ${username}`;
+        } else {
+          document.getElementById('lessonPage').classList.add('show');
+        }
+      } else {
+        if (window.dataSdk && currentRecordCount < 999) {
+          await window.dataSdk.create({
+            username: username,
+            timestamp: new Date().toISOString(),
+            login_success: false,
+            user_type: currentUserType,
+            action_type: "login",
+            lesson_name: ""
+          });
+        }
+        
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('errorPage').classList.add('show');
+      }
+      
+      loginBtn.disabled = false;
+      const configText = (window.elementSdk && window.elementSdk.config && window.elementSdk.config.login_button_text) || defaultConfig.login_button_text;
+      loginBtn.innerHTML = `<i class="fas fa-sign-in-alt"></i><span id="loginButtonText">${configText}</span>`;
+    }
+    
+    function retryLogin(event) {
+      event.preventDefault();
+      document.getElementById('errorPage').classList.remove('show');
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+    
+    function logout() {
+      currentUsername = "";
+      currentUserType = "student";
+      document.getElementById('lessonPage').classList.remove('show');
+      document.getElementById('adminPage').classList.remove('show');
+      document.getElementById('loginPage').classList.remove('hidden');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      
+      const welcomeConfig = (window.elementSdk && window.elementSdk.config && window.elementSdk.config.welcome_text) || defaultConfig.welcome_text;
+      document.getElementById('welcomeText').textContent = welcomeConfig;
+      
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('.tab-btn[data-tab="student"]').classList.add('active');
+    }
+    
+    function showStatistics() {
+      const lessonClicks = allLoginData.filter(d => d.action_type === "lesson_click");
+      
+      const lessonNames = ['แบบทดสอบก่อนเรียน', 'เนื้อหา', 'ใบกิจกรรม', 'แบบทดสอบหลังเรียน', 'Game'];
+      const lessonIcons = ['fa-clipboard-list', 'fa-book-open', 'fa-pencil-alt', 'fa-tasks', 'fa-gamepad'];
+      const lessonColors = ['#fbbf24', '#60a5fa', '#34d399', '#a78bfa', '#f472b6'];
+      
+      let lessonStatsHTML = '';
+      
+      lessonNames.forEach((lessonName, index) => {
+        const clicks = lessonClicks.filter(d => d.lesson_name === lessonName);
+        const clickCount = clicks.length;
+        const uniqueUsers = [...new Set(clicks.map(d => d.username))];
+        
+        lessonStatsHTML += `
+          <div style="background:white;padding:20px;border-radius:15px;margin-bottom:15px;border-left:5px solid ${lessonColors[index]};cursor:pointer;transition:all 0.3s;box-shadow:0 2px 8px rgba(0,0,0,0.1);" onmouseover="this.style.boxShadow='0 8px 20px rgba(0,0,0,0.15)'; this.style.transform='translateX(5px)';" onmouseout="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)'; this.style.transform='translateX(0)';" onclick="showLessonDetail('${lessonName}')">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div style="display:flex;align-items:center;gap:12px;">
+                <i class="fas ${lessonIcons[index]}" style="font-size:24px;color:${lessonColors[index]};"></i>
+                <span style="font-size:18px;font-weight:600;color:#333;">${lessonName}</span>
+              </div>
+              <div style="background:${lessonColors[index]};color:white;padding:6px 16px;border-radius:20px;font-weight:700;font-size:16px;">${clickCount}</div>
+            </div>
+            <div style="font-size:14px;color:#666;">
+              <i class="fas fa-users" style="margin-right:6px;"></i>
+              ${uniqueUsers.length} คนเข้าใช้งาน
+            </div>
+          </div>
+        `;
+      });
+      
+      const loginCount = allLoginData.filter(d => d.action_type === "login").length;
+      
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      overlay.innerHTML = `
+        <div style="background:white;padding:40px;border-radius:25px;max-width:700px;width:100%;max-height:85%;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
+            <h2 style="font-size:28px;color:#333;font-weight:700;"><i class="fas fa-chart-line" style="color:#3b82f6;margin-right:12px;"></i>สถิติการเข้าใช้งาน</h2>
+            <button onclick="event.preventDefault(); this.parentElement.parentElement.parentElement.remove();" style="width:40px;height:40px;border:none;background:#f3f4f6;border-radius:50%;cursor:pointer;font-size:20px;color:#666;transition:all 0.3s;">×</button>
+          </div>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:25px;">
+            <div style="background:linear-gradient(135deg, #3b82f6, #2563eb);padding:25px;border-radius:15px;color:white;text-align:center;">
+              <div style="font-size:38px;font-weight:800;margin-bottom:8px;">${loginCount}</div>
+              <div style="font-size:15px;opacity:0.9;">การเข้าสู่ระบบ</div>
+            </div>
+            <div style="background:linear-gradient(135deg, #10b981, #059669);padding:25px;border-radius:15px;color:white;text-align:center;">
+              <div style="font-size:38px;font-weight:800;margin-bottom:8px;">${lessonClicks.length}</div>
+              <div style="font-size:15px;opacity:0.9;">คลิกเข้าบทเรียน</div>
+            </div>
+          </div>
+          
+          <h3 style="font-size:20px;color:#333;font-weight:700;margin-bottom:15px;padding-left:5px;">
+            <i class="fas fa-book" style="color:#3b82f6;margin-right:8px;"></i>
+            การเข้าใช้งานแต่ละบทเรียน
+          </h3>
+          
+          ${lessonStatsHTML}
+          
+          <div style="background:#e0f2fe;padding:20px;border-radius:12px;margin-top:20px;margin-bottom:20px;">
+            <p style="font-size:14px;color:#0369a1;line-height:1.6;margin:0;">
+              <i class="fas fa-info-circle" style="margin-right:6px;"></i>
+              คลิกที่แต่ละบทเรียนเพื่อดูรายละเอียดว่าใครเข้าใช้งานบ้าง และเมื่อไหร่
+            </p>
+          </div>
+          
+          <button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:16px;background:linear-gradient(135deg, #3b82f6, #2563eb);color:white;border:none;border-radius:15px;font-size:18px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;">ปิด</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+    
+    function showLessonDetail(lessonName) {
+      const clicks = allLoginData.filter(d => d.action_type === "lesson_click" && d.lesson_name === lessonName);
+      
+      const sortedClicks = clicks.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      const detailHTML = sortedClicks.map((click, index) => {
+        const date = new Date(click.timestamp);
+        const dateStr = date.toLocaleDateString('th-TH', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        const timeStr = date.toLocaleTimeString('th-TH', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        
+        return `
+          <div style="padding:15px 20px;background:${index % 2 === 0 ? '#f9fafb' : 'white'};border-radius:10px;display:flex;align-items:center;gap:15px;margin-bottom:8px;">
+            <div style="min-width:35px;height:35px;background:linear-gradient(135deg, #10b981, #059669);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">${index + 1}</div>
+            <div style="flex:1;">
+              <div style="font-size:16px;color:#333;font-weight:600;margin-bottom:4px;">
+                <i class="fas fa-user" style="color:#10b981;margin-right:6px;"></i>${click.username}
+              </div>
+              <div style="font-size:13px;color:#666;">
+                <i class="fas fa-calendar-alt" style="margin-right:6px;color:#3b82f6;"></i>${dateStr}
+                <span style="margin-left:15px;">
+                  <i class="fas fa-clock" style="margin-right:6px;color:#f59e0b;"></i>${timeStr}
+                </span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:1001;padding:20px;';
+      overlay.innerHTML = `
+        <div style="background:white;padding:40px;border-radius:25px;max-width:750px;width:100%;max-height:85%;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;">
+            <h2 style="font-size:26px;color:#333;font-weight:700;">
+              <i class="fas fa-chart-bar" style="color:#10b981;margin-right:12px;"></i>${lessonName}
+            </h2>
+            <button onclick="event.preventDefault(); this.parentElement.parentElement.parentElement.remove();" style="width:40px;height:40px;border:none;background:#f3f4f6;border-radius:50%;cursor:pointer;font-size:20px;color:#666;transition:all 0.3s;">×</button>
+          </div>
+          
+          <div style="background:linear-gradient(135deg, #10b981, #059669);padding:25px;border-radius:15px;color:white;text-align:center;margin-bottom:25px;">
+            <div style="font-size:42px;font-weight:800;margin-bottom:8px;">${clicks.length}</div>
+            <div style="font-size:16px;opacity:0.95;">ครั้งที่เข้าใช้งาน</div>
+          </div>
+          
+          <h3 style="font-size:18px;color:#333;font-weight:700;margin-bottom:15px;">
+            <i class="fas fa-list" style="color:#3b82f6;margin-right:8px;"></i>
+            รายชื่อผู้เข้าใช้งาน
+          </h3>
+          
+          <div style="overflow-y:auto;flex:1;">
+            ${detailHTML || '<div style="text-align:center;padding:40px;color:#999;"><i class="fas fa-inbox" style="font-size:48px;margin-bottom:15px;display:block;"></i>ยังไม่มีการเข้าใช้งาน</div>'}
+          </div>
+          
+          <button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:16px;background:linear-gradient(135deg, #10b981, #059669);color:white;border:none;border-radius:15px;font-size:18px;font-weight:600;cursor:pointer;margin-top:20px;font-family:Mali,sans-serif;">ปิด</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+    
+    function showStudentList() {
+      const studentListHTML = validStudents.map((student, index) => 
+        `<div style="padding:15px 20px;background:${index % 2 === 0 ? '#f9fafb' : 'white'};border-radius:10px;display:flex;align-items:center;gap:15px;">
+          <div style="width:35px;height:35px;background:linear-gradient(135deg, #10b981, #059669);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:14px;">${index + 1}</div>
+          <div style="flex:1;font-size:16px;color:#333;">${student}</div>
+        </div>`
+      ).join('');
+      
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      overlay.innerHTML = `
+        <div style="background:white;padding:40px;border-radius:25px;max-width:700px;width:100%;max-height:80%;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;">
+            <h2 style="font-size:28px;color:#333;font-weight:700;"><i class="fas fa-users" style="color:#10b981;margin-right:12px;"></i>รายชื่อนักเรียน (${validStudents.length} คน)</h2>
+            <button onclick="event.preventDefault(); this.parentElement.parentElement.parentElement.remove();" style="width:40px;height:40px;border:none;background:#f3f4f6;border-radius:50%;cursor:pointer;font-size:20px;color:#666;transition:all 0.3s;">×</button>
+          </div>
+          <div style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px;">
+            ${studentListHTML}
+          </div>
+          <button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:16px;background:linear-gradient(135deg, #10b981, #059669);color:white;border:none;border-radius:15px;font-size:18px;font-weight:600;cursor:pointer;margin-top:25px;font-family:Mali,sans-serif;">ปิด</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+    
+    function showLoginHistory() {
+      const loginData = allLoginData.filter(d => d.action_type === "login");
+      const sortedData = loginData.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      const historyHTML = sortedData.map((record, index) => {
+        const date = new Date(record.timestamp);
+        const dateStr = date.toLocaleDateString('th-TH', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        const timeStr = date.toLocaleTimeString('th-TH', { 
+          hour: '2-digit', 
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        
+        const statusColor = record.login_success ? '#10b981' : '#ef4444';
+        const statusIcon = record.login_success ? 'fa-check-circle' : 'fa-times-circle';
+        const statusText = record.login_success ? 'สำเร็จ' : 'ไม่สำเร็จ';
+        const userTypeText = record.user_type === 'admin' ? '👨‍🏫 ผู้ดูแล' : '🎓 นักเรียน';
+        
+        return `
+          <div style="padding:18px 20px;background:${index % 2 === 0 ? '#f9fafb' : 'white'};border-radius:12px;margin-bottom:10px;border-left:4px solid ${statusColor};">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+              <div>
+                <div style="font-size:17px;color:#333;font-weight:600;margin-bottom:6px;">
+                  <i class="fas fa-user" style="color:#3b82f6;margin-right:8px;"></i>${record.username}
+                </div>
+                <div style="font-size:14px;color:#666;margin-bottom:4px;">
+                  ${userTypeText}
+                </div>
+              </div>
+              <div style="background:${statusColor};color:white;padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;">
+                <i class="fas ${statusIcon}"></i>${statusText}
+              </div>
+            </div>
+            <div style="font-size:13px;color:#666;">
+              <div style="margin-bottom:4px;">
+                <i class="fas fa-calendar-alt" style="margin-right:8px;color:#3b82f6;"></i>${dateStr}
+              </div>
+              <div>
+                <i class="fas fa-clock" style="margin-right:8px;color:#f59e0b;"></i>${timeStr}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      const successCount = loginData.filter(d => d.login_success).length;
+      const failCount = loginData.filter(d => !d.login_success).length;
+      
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      overlay.innerHTML = `
+        <div style="background:white;padding:40px;border-radius:25px;max-width:800px;width:100%;max-height:85%;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;">
+            <h2 style="font-size:28px;color:#333;font-weight:700;"><i class="fas fa-history" style="color:#f59e0b;margin-right:12px;"></i>ประวัติการเข้าสู่ระบบ</h2>
+            <button onclick="event.preventDefault(); this.parentElement.parentElement.parentElement.remove();" style="width:40px;height:40px;border:none;background:#f3f4f6;border-radius:50%;cursor:pointer;font-size:20px;color:#666;transition:all 0.3s;">×</button>
+          </div>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:25px;">
+            <div style="background:linear-gradient(135deg, #3b82f6, #2563eb);padding:20px;border-radius:15px;color:white;text-align:center;">
+              <div style="font-size:32px;font-weight:800;margin-bottom:6px;">${loginData.length}</div>
+              <div style="font-size:13px;opacity:0.9;">ทั้งหมด</div>
+            </div>
+            <div style="background:linear-gradient(135deg, #10b981, #059669);padding:20px;border-radius:15px;color:white;text-align:center;">
+              <div style="font-size:32px;font-weight:800;margin-bottom:6px;">${successCount}</div>
+              <div style="font-size:13px;opacity:0.9;">สำเร็จ</div>
+            </div>
+            <div style="background:linear-gradient(135deg, #ef4444, #dc2626);padding:20px;border-radius:15px;color:white;text-align:center;">
+              <div style="font-size:32px;font-weight:800;margin-bottom:6px;">${failCount}</div>
+              <div style="font-size:13px;opacity:0.9;">ไม่สำเร็จ</div>
+            </div>
+          </div>
+          
+          <h3 style="font-size:18px;color:#333;font-weight:700;margin-bottom:15px;padding-left:5px;">
+            <i class="fas fa-list" style="color:#3b82f6;margin-right:8px;"></i>
+            รายละเอียดการเข้าสู่ระบบ
+          </h3>
+          
+          <div style="flex:1;overflow-y:auto;margin-bottom:20px;">
+            ${historyHTML || '<div style="text-align:center;padding:50px;color:#999;"><i class="fas fa-inbox" style="font-size:50px;margin-bottom:15px;display:block;"></i><p style="font-size:16px;">ยังไม่มีประวัติการเข้าสู่ระบบ</p></div>'}
+          </div>
+          
+          <div style="display:flex;gap:12px;">
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex:1;padding:16px;background:linear-gradient(135deg, #f59e0b, #d97706);color:white;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;">
+              <i class="fas fa-times"></i> ปิด
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+    
+    async function openCanvaSheet() {
+      if (window.dataSdk && window.dataSdk.openDataTable) {
+        const result = await window.dataSdk.openDataTable();
+        if (!result.isOk) {
+          const message = document.createElement('div');
+          message.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);background:white;padding:35px 45px;border-radius:20px;box-shadow:0 15px 50px rgba(0,0,0,0.4);z-index:10000;text-align:center;max-width:500px;border:3px solid #ef4444;';
+          message.innerHTML = `
+            <i class="fas fa-exclamation-circle" style="font-size:55px;color:#ef4444;margin-bottom:20px;"></i>
+            <p style="font-size:20px;color:#333;font-weight:700;margin-bottom:15px;">ไม่สามารถเปิด Canva Sheet ได้</p>
+            <p style="font-size:16px;color:#666;margin:0;line-height:1.8;">กรุณาลองใหม่อีกครั้ง หรือติดต่อผู้ดูแลระบบค่ะ</p>
+          `;
+          document.body.appendChild(message);
+          setTimeout(() => message.remove(), 4000);
+        }
+      } else {
+        const message = document.createElement('div');
+        message.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);background:white;padding:35px 45px;border-radius:20px;box-shadow:0 15px 50px rgba(0,0,0,0.4);z-index:10000;text-align:center;max-width:500px;border:3px solid #10b981;';
+        message.innerHTML = `
+          <i class="fas fa-info-circle" style="font-size:55px;color:#10b981;margin-bottom:20px;"></i>
+          <p style="font-size:20px;color:#333;font-weight:700;margin-bottom:15px;">วิธีเปิด Canva Sheet</p>
+          <p style="font-size:16px;color:#666;margin:0;line-height:1.8;">1. คลิก <strong>"Use in a design"</strong> ที่มุมขวาบน<br>2. ในดีไซน์ให้หาไอคอนตาราง 📊<br>3. หรือเมนู <strong>"Data"</strong> ในแถบด้านข้างค่ะ</p>
+        `;
+        document.body.appendChild(message);
+        setTimeout(() => message.remove(), 5000);
+      }
+    }
+    
+    function showSettings() {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      overlay.innerHTML = `
+        <div style="background:white;padding:40px;border-radius:25px;max-width:600px;width:100%;max-height:80%;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px;">
+            <h2 style="font-size:28px;color:#333;font-weight:700;"><i class="fas fa-cog" style="color:#8b5cf6;margin-right:12px;"></i>ตั้งค่าระบบ</h2>
+            <button onclick="event.preventDefault(); this.parentElement.parentElement.parentElement.remove();" style="width:40px;height:40px;border:none;background:#f3f4f6;border-radius:50%;cursor:pointer;font-size:20px;color:#666;transition:all 0.3s;">×</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <div style="background:#f9fafb;padding:20px;border-radius:15px;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:18px;font-weight:600;color:#333;margin-bottom:5px;">รหัสผ่านนักเรียน</div>
+                <div style="font-size:14px;color:#666;">str104</div>
+              </div>
+              <i class="fas fa-key" style="font-size:24px;color:#8b5cf6;"></i>
+            </div>
+            <div style="background:#f9fafb;padding:20px;border-radius:15px;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:18px;font-weight:600;color:#333;margin-bottom:5px;">จำนวนนักเรียนทั้งหมด</div>
+                <div style="font-size:14px;color:#666;">${validStudents.length} คน</div>
+              </div>
+              <i class="fas fa-user-graduate" style="font-size:24px;color:#8b5cf6;"></i>
+            </div>
+            <div style="background:#f9fafb;padding:20px;border-radius:15px;display:flex;align-items:center;justify-content:space-between;">
+              <div>
+                <div style="font-size:18px;font-weight:600;color:#333;margin-bottom:5px;">ขีดจำกัดการบันทึก</div>
+                <div style="font-size:14px;color:#666;">999 รายการ</div>
+              </div>
+              <i class="fas fa-database" style="font-size:24px;color:#8b5cf6;"></i>
+            </div>
+          </div>
+          <button onclick="this.parentElement.parentElement.remove()" style="width:100%;padding:16px;background:linear-gradient(135deg, #8b5cf6, #7c3aed);color:white;border:none;border-radius:15px;font-size:18px;font-weight:600;cursor:pointer;margin-top:25px;font-family:Mali,sans-serif;">ปิด</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+    
+    async function resetStatistics() {
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:1000;padding:20px;';
+      overlay.innerHTML = `
+        <div style="background:white;padding:40px;border-radius:25px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.4);">
+          <div style="text-align:center;margin-bottom:30px;">
+            <i class="fas fa-exclamation-triangle" style="font-size:70px;color:#ef4444;margin-bottom:20px;"></i>
+            <h2 style="font-size:26px;color:#333;font-weight:700;margin-bottom:15px;">ยืนยันการรีเซ็ตสถิติ</h2>
+            <p style="font-size:16px;color:#666;line-height:1.8;margin:0;">
+              คุณต้องการลบข้อมูลสถิติทั้งหมด ${currentRecordCount} รายการใช่หรือไม่?<br>
+              <strong style="color:#ef4444;">การดำเนินการนี้ไม่สามารถย้อนกลับได้</strong>
+            </p>
+          </div>
+          <div style="display:flex;gap:15px;">
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="flex:1;padding:16px;background:#e5e7eb;color:#374151;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;transition:all 0.3s;">
+              <i class="fas fa-times"></i> ยกเลิก
+            </button>
+            <button onclick="confirmResetStatistics(this)" style="flex:1;padding:16px;background:linear-gradient(135deg, #ef4444, #dc2626);color:white;border:none;border-radius:15px;font-size:17px;font-weight:600;cursor:pointer;font-family:Mali,sans-serif;transition:all 0.3s;box-shadow:0 5px 20px rgba(239, 68, 68, 0.3);">
+              <i class="fas fa-trash-alt"></i> ยืนยันลบ
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+    }
+    
+    async function confirmResetStatistics(button) {
+      if (!window.dataSdk) {
+        showNotification('ไม่พบระบบจัดเก็บข้อมูล', 'error');
+        return;
+      }
+      
+      button.disabled = true;
+      button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังลบ...';
+      
+      let deletedCount = 0;
+      const totalRecords = allLoginData.length;
+      
+      for (const record of allLoginData) {
+        const result = await window.dataSdk.delete(record);
+        if (result.isOk) {
+          deletedCount++;
+        }
+      }
+      
+      button.parentElement.parentElement.parentElement.remove();
+      
+      if (deletedCount === totalRecords) {
+        showNotification(`รีเซ็ตสถิติสำเร็จ! ลบข้อมูล ${deletedCount} รายการ`, 'success');
+      } else {
+        showNotification(`ลบได้ ${deletedCount} จาก ${totalRecords} รายการ`, 'warning');
+      }
+    }
+    
+    function showNotification(message, type = 'success') {
+      const colors = {
+        success: { bg: '#10b981', icon: 'fa-check-circle' },
+        error: { bg: '#ef4444', icon: 'fa-times-circle' },
+        warning: { bg: '#f59e0b', icon: 'fa-exclamation-triangle' }
+      };
+      
+      const color = colors[type] || colors.success;
+      
+      const notification = document.createElement('div');
+      notification.style.cssText = `position:fixed;top:30px;right:30px;background:${color.bg};color:white;padding:20px 30px;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:10000;display:flex;align-items:center;gap:15px;font-size:16px;font-weight:600;animation:slideIn 0.3s ease-out;`;
+      notification.innerHTML = `<i class="fas ${color.icon}" style="font-size:24px;"></i>${message}`;
+      
+      const style = document.createElement('style');
+      style.textContent = '@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }';
+      document.head.appendChild(style);
+      
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.style.animation = 'slideIn 0.3s ease-out reverse';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+    
+    initializeSDKs();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c1523a190597b3c',t:'MTc2ODk4MDk3Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+
+
